@@ -1,6 +1,7 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
+import { History } from "./History";
 
 function Balance(props) {
   return (
@@ -58,7 +59,7 @@ export class ExpenseTracker extends React.Component {
       Number(this.state.amount) >= 0
     ) {
       const newIncome = {
-        income: Number(this.state.amount),
+        amt: Number(this.state.amount),
         history: this.state.history,
       };
       this.setState((state) => {
@@ -71,7 +72,7 @@ export class ExpenseTracker extends React.Component {
       Number(this.state.amount) < 0
     ) {
       const newIncome = {
-        expense: Number(this.state.amount),
+        amt: Number(this.state.amount),
         history: this.state.history,
       };
       this.setState((state) => {
@@ -89,7 +90,7 @@ export class ExpenseTracker extends React.Component {
         <Balance p={this.state.bal} />
         <Income p={this.state.inc} />
         <Expense p={this.state.exp} />
-        {/* <History /> */}
+        <History ui={this.state.transaction_arr} />
 
         <input
           onChange={this.handleChangeHis}
