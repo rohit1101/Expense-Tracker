@@ -3,40 +3,56 @@ import React from "react";
 import "./App.css";
 import { History } from "./History";
 
-function Balance(props) {
+function Balance({ bal }) {
+  const newSumArray = [...bal];
+  let sum = 0;
+  newSumArray.forEach((item) => {
+    sum += item.amt;
+  });
   return (
     <div>
       <h1>Balance:</h1>
-      <p>{props.p}</p>
+      <p>${sum}</p>
     </div>
   );
 }
 
-function Income(props) {
+function Income({ inc }) {
+  const incArr = [...inc];
+  let sum = 0;
+  incArr.forEach((item) => {
+    if (item.amt >= 0) {
+      sum += item.amt;
+    }
+  });
   return (
     <div>
       <h1>Income:</h1>
-      <p>{props.p}</p>
+      <p>${sum}</p>
     </div>
   );
 }
 
-function Expense(props) {
+function Expense({ exp }) {
+  const expArr = [...exp];
+  let sum = 0;
+  expArr.forEach((item) => {
+    if (item.amt < 0) {
+      sum += Math.abs(item.amt);
+    }
+  });
+  console.log(sum);
   return (
     <div>
       <h1>Expense:</h1>
-      <p>{props.p}</p>
+      <p>{sum !== 0 ? `-$${sum}` : "$0"}</p>
     </div>
   );
 }
 
 export class ExpenseTracker extends React.Component {
   state = {
-    transaction_arr: {
-      bal: [],
-      inc: [],
-      exp: [],
-    },
+    transaction_arr: [],
     amount: "",
     history: "",
   };
@@ -63,7 +79,7 @@ export class ExpenseTracker extends React.Component {
         history: this.state.history,
       };
       this.setState((state) => {
-        return state.transaction_arr.inc.push(newIncome);
+        return state.transaction_arr.push(newIncome);
       });
     }
 
@@ -76,7 +92,7 @@ export class ExpenseTracker extends React.Component {
         history: this.state.history,
       };
       this.setState((state) => {
-        return state.transaction_arr.exp.push(newIncome);
+        return state.transaction_arr.push(newIncome);
       });
     }
 
@@ -87,9 +103,9 @@ export class ExpenseTracker extends React.Component {
     return (
       <div>
         <h1>Expense Tracker</h1>
-        <Balance p={this.state.bal} />
-        <Income p={this.state.inc} />
-        <Expense p={this.state.exp} />
+        <Balance bal={this.state.transaction_arr} />
+        <Income inc={this.state.transaction_arr} />
+        <Expense exp={this.state.transaction_arr} />
         <History ui={this.state.transaction_arr} />
 
         <input
