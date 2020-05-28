@@ -1,55 +1,11 @@
 import React from "react";
-// import logo from "./logo.svg";
 import "./App.css";
 import { History } from "./History";
-
-function Balance({ bal }) {
-  const newSumArray = [...bal];
-  let sum = 0;
-  newSumArray.forEach((item) => {
-    sum += item.amt;
-  });
-  return (
-    <div>
-      <h1>Balance:</h1>
-      <p>${sum}</p>
-    </div>
-  );
-}
-
-function Income({ inc }) {
-  const incArr = [...inc];
-  let sum = 0;
-  incArr.forEach((item) => {
-    if (item.amt >= 0) {
-      sum += item.amt;
-    }
-  });
-  return (
-    <div>
-      <h1>Income:</h1>
-      <p>${sum}</p>
-    </div>
-  );
-}
-
-function Expense({ exp }) {
-  const expArr = [...exp];
-  let sum = 0;
-  expArr.forEach((item) => {
-    if (item.amt < 0) {
-      sum += Math.abs(item.amt);
-    }
-  });
-  console.log(sum);
-  return (
-    <div>
-      <h1>Expense:</h1>
-      <p>{sum !== 0 ? `-$${sum}` : "$0"}</p>
-    </div>
-  );
-}
-
+import { Balance } from "./Balance/Balance";
+import { Income } from "./Income/Income";
+import { Expense } from "./Expense/Expense";
+import { DescriptionInput } from "./DescriptionInput";
+import { AmountInput } from "./AmountInput";
 export class ExpenseTracker extends React.Component {
   state = {
     transaction_arr: [],
@@ -65,7 +21,7 @@ export class ExpenseTracker extends React.Component {
     this.setState({ history: e.target.value });
   };
 
-  handleClick = (e) => {
+  handleClick = () => {
     if (this.state.amount.trim().length === 0) {
       return;
     }
@@ -108,15 +64,14 @@ export class ExpenseTracker extends React.Component {
         <Expense exp={this.state.transaction_arr} />
         <History ui={this.state.transaction_arr} />
 
-        <input
-          onChange={this.handleChangeHis}
-          placeholder="What was the need ?"
+        <DescriptionInput
+          eventHandler={this.handleChangeHis}
+          placeholder="Description"
           value={this.state.history}
         />
 
-        <input
-          onChange={this.handleChange}
-          type="number"
+        <AmountInput
+          eventHandler={this.handleChange}
           placeholder="Enter Amount"
           value={this.state.amount}
         />
