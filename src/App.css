@@ -44,3 +44,8 @@
 .inc {
   color: green;
 }
+
+i {
+  color: black;
+  padding: 0 0.5rem;
+}

@@ -1,20 +1,15 @@
 import React from "react";
 import "./App.css";
+import { Item } from "./HistoryItem";
 
-export function History({ ui }) {
+export function History({ ui, del, edit }) {
   const renderArray = [...ui];
   console.log(renderArray);
-
+  let i = 0;
   return (
     <div>
       {renderArray.map((item) => {
-        return (
-          <div>
-            <p className={item.amt >= 0 ? "inc" : "exp"}>
-              ${Math.abs(item.amt)} - {item.history}
-            </p>
-          </div>
-        );
+        return <Item key={i++} item={item} del={del} edit={edit} />;
       })}
     </div>
   );

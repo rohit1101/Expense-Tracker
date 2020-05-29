@@ -33,6 +33,7 @@ export class ExpenseTracker extends React.Component {
       const newIncome = {
         amt: Number(this.state.amount),
         history: this.state.history,
+        id: new Date().getTime(),
       };
       this.setState((state) => {
         return state.transaction_arr.push(newIncome);
@@ -55,6 +56,21 @@ export class ExpenseTracker extends React.Component {
     this.setState({ history: "", amount: "" });
   };
 
+  handleDelete = (e, id) => {
+    const newArr = this.state.transaction_arr.filter((item) => {
+      return item.id !== id;
+    });
+    this.setState({ transaction_arr: newArr });
+  };
+
+  handleUpdate = (amount, id) => {
+    const editedArr = [...this.state.transaction_arr];
+    editedArr.map((item) => {
+      return item.id === id && (item.amt = Number(amount));
+    });
+    this.setState({ transaction_arr: editedArr });
+  };
+
   render() {
     return (
       <div>
@@ -62,7 +78,11 @@ export class ExpenseTracker extends React.Component {
         <Balance bal={this.state.transaction_arr} />
         <Income inc={this.state.transaction_arr} />
         <Expense exp={this.state.transaction_arr} />
-        <History ui={this.state.transaction_arr} />
+        <History
+          ui={this.state.transaction_arr}
+          del={this.handleDelete}
+          edit={this.handleUpdate}
+        />
 
         <DescriptionInput
           eventHandler={this.handleChangeHis}
