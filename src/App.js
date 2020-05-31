@@ -2,10 +2,10 @@ import React from "react";
 import "./App.css";
 import { History } from "./History";
 import { Balance } from "./Balance/Balance";
-import { Income } from "./Income/Income";
-import { Expense } from "./Expense/Expense";
+
 import { DescriptionInput } from "./DescriptionInput";
 import { AmountInput } from "./AmountInput";
+import * as api from "./api";
 // import { ref } from "./index";
 
 export class ExpenseTracker extends React.Component {
@@ -14,6 +14,24 @@ export class ExpenseTracker extends React.Component {
     amount: "",
     history: "",
   };
+
+  async componentDidMount() {
+    const transactions = await api.getExpenses();
+    console.log("TRANSACTIONS: ", transactions);
+
+    this.setState({
+      transaction_arr: transactions || [],
+    });
+  }
+
+  async componentDidUpdate(_, prevState) {
+    const { transaction_arr } = this.state;
+    console.log("UPDATE", prevState, this.state);
+    if (prevState.transaction_arr !== transaction_arr) {
+      console.log("PUTTING", transaction_arr);
+      await api.putExpenses(transaction_arr);
+    }
+  }
 
   handleChange = (e) => {
     this.setState({ amount: e.target.value });
@@ -27,35 +45,16 @@ export class ExpenseTracker extends React.Component {
     if (this.state.amount.trim().length === 0) {
       return;
     }
+    const newTxn = {
+      amt: Number(this.state.amount),
+      history: this.state.history,
+      id: new Date().getTime(),
+    };
 
-    if (
-      this.state.amount.trim().length !== 0 &&
-      Number(this.state.amount) >= 0
-    ) {
-      const newIncome = {
-        amt: Number(this.state.amount),
-        history: this.state.history,
-        id: new Date().getTime(),
-      };
-      this.setState((state) => {
-        return state.transaction_arr.push(newIncome);
-      });
-    }
+    const newArr = [...this.state.transaction_arr];
+    newArr.push(newTxn);
 
-    if (
-      this.state.amount.trim().length !== 0 &&
-      Number(this.state.amount) < 0
-    ) {
-      const newIncome = {
-        amt: Number(this.state.amount),
-        history: this.state.history,
-      };
-      this.setState((state) => {
-        return state.transaction_arr.push(newIncome);
-      });
-    }
-
-    this.setState({ history: "", amount: "" });
+    this.setState({ history: "", amount: "", transaction_arr: newArr });
   };
 
   handleDelete = (e, id) => {
@@ -73,33 +72,11 @@ export class ExpenseTracker extends React.Component {
     this.setState({ transaction_arr: editedArr });
   };
 
-  // async fetchingFirebase(ref) {
-  //   const response = await fetch(
-  //     `https://expensetracker-ddc5d.firebaseio.com/${ref}.json`
-  //   );
-  //   console.log(response);
-  // }
-
-  async getData() {
-    const response = await fetch(
-      `https://expensetracker-ddc5d.firebaseio.com/expense.json`
-    );
-    const data = await response.json();
-    console.log(data);
-  }
-
-  componentDidMount = (e) => {
-    this.getData();
-    // ref.on("value", this.getData, this.errData);
-  };
-
   render() {
     return (
       <div>
         <h1>Expense Tracker</h1>
         <Balance bal={this.state.transaction_arr} />
-        <Income inc={this.state.transaction_arr} />
-        <Expense exp={this.state.transaction_arr} />
         <History
           ui={this.state.transaction_arr}
           del={this.handleDelete}
