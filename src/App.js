@@ -2,11 +2,9 @@ import React from "react";
 import "./App.css";
 import { History } from "./History";
 import { Balance } from "./Balance/Balance";
-
 import { DescriptionInput } from "./DescriptionInput";
 import { AmountInput } from "./AmountInput";
 import * as api from "./api";
-// import { ref } from "./index";
 
 export class ExpenseTracker extends React.Component {
   state = {
@@ -26,7 +24,7 @@ export class ExpenseTracker extends React.Component {
 
   async componentDidUpdate(_, prevState) {
     const { transaction_arr } = this.state;
-    console.log("UPDATE", prevState, this.state);
+    console.log("UPDATE->", prevState, this.state);
     if (prevState.transaction_arr !== transaction_arr) {
       console.log("PUTTING", transaction_arr);
       await api.putExpenses(transaction_arr);
