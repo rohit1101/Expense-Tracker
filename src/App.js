@@ -6,6 +6,8 @@ import { Income } from "./Income/Income";
 import { Expense } from "./Expense/Expense";
 import { DescriptionInput } from "./DescriptionInput";
 import { AmountInput } from "./AmountInput";
+// import { ref } from "./index";
+
 export class ExpenseTracker extends React.Component {
   state = {
     transaction_arr: [],
@@ -69,6 +71,26 @@ export class ExpenseTracker extends React.Component {
       return item.id === id && (item.amt = Number(amount));
     });
     this.setState({ transaction_arr: editedArr });
+  };
+
+  // async fetchingFirebase(ref) {
+  //   const response = await fetch(
+  //     `https://expensetracker-ddc5d.firebaseio.com/${ref}.json`
+  //   );
+  //   console.log(response);
+  // }
+
+  async getData() {
+    const response = await fetch(
+      `https://expensetracker-ddc5d.firebaseio.com/expense.json`
+    );
+    const data = await response.json();
+    console.log(data);
+  }
+
+  componentDidMount = (e) => {
+    this.getData();
+    // ref.on("value", this.getData, this.errData);
   };
 
   render() {

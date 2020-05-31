@@ -4,7 +4,7 @@ import { Item } from "./HistoryItem";
 
 export function History({ ui, del, edit }) {
   const renderArray = [...ui];
-  console.log(renderArray);
+
   let i = 0;
   return (
     <div>

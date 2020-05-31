@@ -7,7 +7,7 @@ export function Expense({ exp }) {
       sum += Math.abs(item.amt);
     }
   });
-  console.log(sum);
+
   return (
     <div>
       <h1>Expense:</h1>
