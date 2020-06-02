@@ -15,7 +15,7 @@ export class ExpenseTracker extends React.Component {
 
   async componentDidMount() {
     const transactions = await api.getExpenses();
-    console.log("TRANSACTIONS: ", transactions);
+    console.log(transactions);
 
     this.setState({
       transaction_arr: transactions || [],
@@ -40,7 +40,11 @@ export class ExpenseTracker extends React.Component {
   };
 
   handleClick = () => {
-    if (this.state.amount.trim().length === 0) {
+    if (
+      this.state.amount.trim().length === 0 ||
+      this.state.history.trim().length === 0
+    ) {
+      alert("Fill all the fields");
       return;
     }
     const newTxn = {
@@ -72,27 +76,46 @@ export class ExpenseTracker extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Expense Tracker</h1>
-        <Balance bal={this.state.transaction_arr} />
-        <History
-          ui={this.state.transaction_arr}
-          del={this.handleDelete}
-          edit={this.handleUpdate}
-        />
+      <div className="container">
+        <h1 className="head">Expense Tracker</h1>
+        <div className="main">
+          <Balance bal={this.state.transaction_arr} />
+          <h3 style={{ fontSize: "2rem" }}>History</h3>
+          <History
+            ui={this.state.transaction_arr}
+            del={this.handleDelete}
+            edit={this.handleUpdate}
+          />
+          <div className="inputs">
+            <form>
+              <label style={{ fontSize: "1.8rem" }}>Add Transactions</label>
+              <DescriptionInput
+                eventHandler={this.handleChangeHis}
+                placeholder="Description"
+                value={this.state.history}
+              />
+              <label style={{ fontSize: "1.8rem" }}>Enter Amount</label>
+              <AmountInput
+                eventHandler={this.handleChange}
+                placeholder="Enter Amount"
+                value={this.state.amount}
+              />
+            </form>
 
-        <DescriptionInput
-          eventHandler={this.handleChangeHis}
-          placeholder="Description"
-          value={this.state.history}
-        />
-
-        <AmountInput
-          eventHandler={this.handleChange}
-          placeholder="Enter Amount"
-          value={this.state.amount}
-        />
-        <button onClick={this.handleClick}>Enter Amount</button>
+            <button
+              style={{
+                padding: "1rem 0",
+                margin: "1rem 0",
+                border: "none",
+                background: "#a4def9",
+                fontSize: "2rem",
+              }}
+              onClick={this.handleClick}
+            >
+              Enter Amount
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

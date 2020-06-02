@@ -34,7 +34,10 @@ export class Item extends React.Component {
             </button>
           </div>
         ) : (
-          <p className={item.amt >= 0 ? "inc" : "exp"}>
+          <p
+            style={{ fontSize: "1.6rem", margin: "1rem 0" }}
+            className={item.amt >= 0 ? "inc" : "exp"}
+          >
             ${Math.abs(item.amt)} - {item.history}
             <i
               className="fas fa-edit"
