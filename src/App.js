@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "./media-App.css";
 import { History } from "./History";
 import { Balance } from "./Balance/Balance";
 import { DescriptionInput } from "./DescriptionInput";
@@ -77,8 +78,8 @@ export class ExpenseTracker extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1 className="head">Expense Tracker</h1>
         <div className="main">
+          <h1 style={{ fontSize: "3.5rem" }}>Expense Tracker</h1>
           <Balance bal={this.state.transaction_arr} />
           <h3 style={{ fontSize: "2rem" }}>History</h3>
           <History
@@ -95,6 +96,9 @@ export class ExpenseTracker extends React.Component {
                 value={this.state.history}
               />
               <label style={{ fontSize: "1.8rem" }}>Enter Amount</label>
+              <p style={{ margin: "0.5rem 0", fontSize: "1.2rem" }}>
+                Enter Positive Value (Income) or Enter Negative Value (Expense)
+              </p>
               <AmountInput
                 eventHandler={this.handleChange}
                 placeholder="Enter Amount"
